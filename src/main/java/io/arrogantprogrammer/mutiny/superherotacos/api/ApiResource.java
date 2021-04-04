@@ -1,6 +1,8 @@
 package io.arrogantprogrammer.mutiny.superherotacos.api;
 
 import io.arrogantprogrammer.mutiny.superherotacos.api.rest.client.TacofancyRESTClient;
+import io.smallrye.mutiny.Multi;
+import io.smallrye.mutiny.Uni;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import javax.inject.Inject;
@@ -26,5 +28,12 @@ public class ApiResource {
     public String getRandomTaco() {
 
         return tacofancyRESTClient.getRandomTaco();
+    }
+
+    @GET
+    @Path("/filling")
+    public Uni<String> getTacoFilling() {
+
+        return tacofancyRESTClient.getBaseLayer();
     }
 }
