@@ -1,6 +1,7 @@
 package io.arrogantprogrammer.mutiny.superherotacos.api.rest.client;
 
 import io.arrogantprogrammer.mutiny.superherotacos.api.domain.tacos.*;
+import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
@@ -43,4 +44,8 @@ public interface ReactiveTacoClient {
     @Produces(MediaType.APPLICATION_JSON)
     Uni<List<Shell>> getShells();
 
+    @GET
+    @Path("/shells/")
+    @Produces(MediaType.APPLICATION_JSON)
+    Multi<Shell> getMultiShells();
 }

@@ -1,6 +1,9 @@
 package io.arrogantprogrammer.mutiny.superherotacos.api;
 
+import io.arrogantprogrammer.mutiny.superherotacos.api.domain.tacos.Filling;
+import io.arrogantprogrammer.mutiny.superherotacos.api.domain.tacos.Shell;
 import io.arrogantprogrammer.mutiny.superherotacos.api.rest.client.ReactiveTacoClient;
+import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.tuples.Tuple2;
 import io.smallrye.mutiny.tuples.Tuple4;
@@ -87,4 +90,10 @@ public class ReactiveApiResource {
         });
     }
 
+    @GET
+    @Path("/multitaco")
+    public Multi<String> getRandomTacoMulti() {
+        return Multi.createFrom().items(
+                getRandomTacoFilling().onItem().transform(s -> { return s; }).toString(), getRandomMixin().onItem().transform(s -> { return s; }).toString());
+    }
 }
