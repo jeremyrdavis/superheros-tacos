@@ -1,7 +1,8 @@
 package io.arrogantprogrammer.mutiny.superherotacos.api.rest.client;
 
+import io.arrogantprogrammer.mutiny.superherotacos.api.domain.tacos.Condiment;
 import io.arrogantprogrammer.mutiny.superherotacos.api.domain.tacos.Filling;
-import io.smallrye.mutiny.Multi;
+import io.arrogantprogrammer.mutiny.superherotacos.api.domain.tacos.Mixin;
 import io.smallrye.mutiny.Uni;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
@@ -12,7 +13,7 @@ import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 @RegisterRestClient(configKey = "tacofancy-api")
-public interface TacofancyRESTClient {
+public interface ReactiveTacoClient {
 
     @GET
     @Path("/random/")
@@ -22,6 +23,15 @@ public interface TacofancyRESTClient {
     @GET
     @Path("/base_layers/")
     @Produces(MediaType.APPLICATION_JSON)
-    Uni<List<Filling>> getBaseLayer();
+    Uni<List<Filling>> getBaseLayers();
 
+    @GET
+    @Path("/mixins/")
+    @Produces(MediaType.APPLICATION_JSON)
+    Uni<List<Mixin>> getMixins();
+
+    @GET
+    @Path("/mixins/")
+    @Produces(MediaType.APPLICATION_JSON)
+    Uni<List<Condiment>> getCondiments();
 }
