@@ -1,8 +1,6 @@
 package io.arrogantprogrammer.mutiny.superherotacos.api.rest.client;
 
-import io.arrogantprogrammer.mutiny.superherotacos.api.domain.tacos.Condiment;
-import io.arrogantprogrammer.mutiny.superherotacos.api.domain.tacos.Filling;
-import io.arrogantprogrammer.mutiny.superherotacos.api.domain.tacos.Mixin;
+import io.arrogantprogrammer.mutiny.superherotacos.api.domain.tacos.*;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 import javax.ws.rs.GET;
@@ -28,5 +26,15 @@ public interface ImperativeTacoClient {
     @Path("/mixins/")
     @Produces(MediaType.APPLICATION_JSON)
     List<Condiment> getCondiments();
+
+    @GET
+    @Path("/mixins/")
+    @Produces(MediaType.APPLICATION_JSON)
+    List<Seasoning> getSeasonings();
+
+    @GET
+    @Path("/mixins/")
+    @Produces(MediaType.APPLICATION_JSON)
+    List<Shell> getShells();
 
 }

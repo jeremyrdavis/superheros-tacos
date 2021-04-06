@@ -1,9 +1,9 @@
 package io.arrogantprogrammer.mutiny.superherotacos.api;
 
-import io.arrogantprogrammer.mutiny.superherotacos.api.domain.tacos.Condiment;
-import io.arrogantprogrammer.mutiny.superherotacos.api.domain.tacos.Filling;
-import io.arrogantprogrammer.mutiny.superherotacos.api.domain.tacos.Mixin;
+import io.arrogantprogrammer.mutiny.superherotacos.api.domain.tacos.*;
 import io.arrogantprogrammer.mutiny.superherotacos.api.rest.client.ImperativeTacoClient;
+import io.smallrye.mutiny.Uni;
+import io.smallrye.mutiny.tuples.Tuple5;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import javax.inject.Inject;
@@ -43,4 +43,37 @@ public class ImperativeApiResource {
         Condiment condiment = allCondiments.get(new Random().nextInt(allCondiments.size()));
         return condiment.getName();
     }
+
+    @GET
+    @Path("/condiment")
+    public String getRandomSeasoning() {
+        List<Seasoning> allSeasonings = imperativeTacoClient.getSeasonings();
+        Seasoning seasoning = allSeasonings.get(new Random().nextInt(allSeasonings.size()));
+        return seasoning.getName();
+    }
+
+    @GET
+    @Path("/condiment")
+    public String getRandomShell() {
+        List<Shell> allShells = imperativeTacoClient.getShells();
+        Shell shell = allShells.get(new Random().nextInt(allShells.size()));
+        return shell.getName();
+    }
+
+    @GET
+    @Path("/taco")
+    public String getRandomTaco() {
+        String filling = getRandomTacoFilling();
+        String mixin = getRandomMixin();
+        String condiment = getRandomCondiment();
+        String shell = getRandomShell();
+        String seasoning = getRandomSeasoning();
+        return new StringBuilder()
+                .append(filling)
+                .append(mixin)
+                .append(condiment)
+                .append(seasoning)
+                .append(shell).toString();
+    }
+
 }

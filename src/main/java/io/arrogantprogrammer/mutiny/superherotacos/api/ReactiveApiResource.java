@@ -2,6 +2,9 @@ package io.arrogantprogrammer.mutiny.superherotacos.api;
 
 import io.arrogantprogrammer.mutiny.superherotacos.api.rest.client.ReactiveTacoClient;
 import io.smallrye.mutiny.Uni;
+import io.smallrye.mutiny.tuples.Tuple2;
+import io.smallrye.mutiny.tuples.Tuple4;
+import io.smallrye.mutiny.tuples.Tuple5;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,10 +53,38 @@ public class ReactiveApiResource {
     }
 
     @GET
-    @Path("/taco")
-    public String getRandomTaco() {
+    @Path("/seasoning")
+    public Uni<String> getRandomSeasoning() {
+        return reactiveTacoClient.getSeasonings().onItem().transform(seasonings -> {
+            return seasonings.get(new Random().nextInt(seasonings.size())).getName();
+        });
+    }
+    @GET
+    @Path("/shell")
+    public Uni<String> getRandomShell() {
+        return reactiveTacoClient.getShells().onItem().transform(shells -> {
+            return shells.get(new Random().nextInt(shells.size())).getName();
+        });
+    }
 
-        return reactiveTacoClient.getRandomTaco();
+    @GET
+    @Path("/taco")
+    public Uni<String> getRandomTaco() {
+        Uni<Tuple5<String, String, String, String, String>> tuple = Uni.combine().all()
+                .unis(getRandomTacoFilling(), getRandomMixin(), getRandomSeasoning(), getRandomCondiment(), getRandomShell())
+                .asTuple();
+        return tuple.map(t -> {
+            return new StringBuilder()
+                    .append(t.getItem1())
+                    .append(" ")
+                    .append(t.getItem2())
+                    .append(" ")
+                    .append(t.getItem3())
+                    .append(" ")
+                    .append(t.getItem4())
+                    .append(" ")
+                    .append(t.getItem5()).toString();
+        });
     }
 
 }
