@@ -33,4 +33,24 @@ public class ReactiveBeerApiResource {
                 });
     }
 
+    @GET
+    @Path("/allipas")
+    public String getRandomIPA() {
+        Multi.<Beer>createFrom()
+                .iterable(imperativeBeerClient.getBeers())
+                .select()
+                .where(beer -> {
+                    return beer.getTagline().contains("IPA");
+                });
+
+        return "foo";
+    }
+
+    @GET
+    @Path("/beer/random")
+    public String getRandomBeer() {
+
+    }
+
+
 }
