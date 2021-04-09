@@ -61,7 +61,7 @@ public class ReactiveBeerApiResource {
 
     @GET
     @Path("/beer/random")
-    public Multi<Beer> getRandomBeer() {
+    public Uni<String> getRandomBeer() {
 
         return Multi.createBy()
                 .repeating()
@@ -72,7 +72,13 @@ public class ReactiveBeerApiResource {
                 )
                 .until(List::isEmpty)
                 .onItem()
-                .disjoint();
+                .disjoint()
+                .collect()
+                .asList()
+                .onItem()
+                .transform(beers -> {
+                    return ((Beer) beers.get(new Random().nextInt(beers.size()))).getName();
+                });
     }
 
     Uni<List<Beer>> getListOfBeers(int page) {
