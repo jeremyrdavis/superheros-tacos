@@ -62,11 +62,13 @@ public class ReactiveBeerApiResource {
     @GET
     @Path("/beer/random")
     public Multi<Beer> getRandomBeer() {
+
         return Multi.createBy()
                 .repeating()
                 .uni(AtomicInteger::new, page ->
                 //getListOfBeers(page.incrementAndGet())
-                    getListOfBeers(page.incrementAndGet())
+                    reactiveBeerClient.getBeersPage(page.incrementAndGet())
+                            .onFailure().recoverWithUni((Uni.createFrom().item(Collections.emptyList())))
                 )
                 .until(List::isEmpty)
                 .onItem()
@@ -74,11 +76,18 @@ public class ReactiveBeerApiResource {
     }
 
     Uni<List<Beer>> getListOfBeers(int page) {
-        if (page == 7) {
+        logger.debug("page {}", page);
+        return reactiveBeerClient.getBeersPage(page)
+                .onFailure().recoverWithUni((Uni.createFrom().item(Collections.emptyList())));
+
+
+/*
+        if (page == 14) {
             return Uni.createFrom().item(Collections.emptyList());
         }else {
             return reactiveBeerClient.getBeers();
         }
+*/
     }
         /*
         return Multi.createBy()
